@@ -27,7 +27,7 @@ export default class Game extends Phaser.Scene {
     );
     this.load.image("tiles", "assets/tilesheet.png");
     this.load.tilemapTiledJSON("tilemap", "assets/game.json");
-    // this.load.image("coffee", "assets/coffee.png");
+    this.load.image("coffee", "assets/coffee.png");
   }
 
   create() {
@@ -42,7 +42,6 @@ export default class Game extends Phaser.Scene {
     }
     ground.setCollisionByProperty({ collides: true });
 
-    this.matter.world.convertTilemapLayer(ground);
     const objectsLayer = map.getObjectLayer("objects");
     objectsLayer?.objects.forEach((objData) => {
       const { x = 0, y = 0, name } = objData;
@@ -58,12 +57,16 @@ export default class Game extends Phaser.Scene {
             this.character,
             this.cursors
           );
-          // this.matter.add.sprite(x, y, "coffee").setScale(0.01);
+          this.matter.add
+            .sprite(x - 100, y - 100, "coffee")
+            .setScale(0.01)
+            .setFixedRotation();
           this.cameras.main.startFollow(this.character);
           break;
         }
       }
     });
+    this.matter.world.convertTilemapLayer(ground);
   }
 
   update(_t: number, dt: number) {
