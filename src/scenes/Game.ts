@@ -1,11 +1,13 @@
 import Phaser from "phaser";
 import PlayerController from "./PlayerController";
-
+import { CursorKeys, Sprite } from "./types";
+import HazardController from "./HazardController";
 export default class Game extends Phaser.Scene {
-  private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
-  private character!: Phaser.Physics.Matter.Sprite;
-  private playerController?: PlayerController;
+  private cursors!: CursorKeys;
 
+  private character!: Sprite;
+  private playerController?: PlayerController;
+  private hazards!: HazardController;
   constructor() {
     super("game");
   }
@@ -17,6 +19,9 @@ export default class Game extends Phaser.Scene {
     } else {
       throw new Error("Unable to create cursor keys");
     }
+    this.hazards = new HazardController();
+
+    this.scene.launch("ui");
   }
 
   preload() {
@@ -28,6 +33,7 @@ export default class Game extends Phaser.Scene {
     this.load.image("tiles", "assets/tilesheet.png");
     this.load.tilemapTiledJSON("tilemap", "assets/game.json");
     this.load.image("coffee", "assets/coffee.png");
+    this.load.image("report", "assets/report.png");
   }
 
   create() {
@@ -42,26 +48,59 @@ export default class Game extends Phaser.Scene {
     }
     ground.setCollisionByProperty({ collides: true });
 
+    map.createLayer("hazards", tileset);
     const objectsLayer = map.getObjectLayer("objects");
     objectsLayer?.objects.forEach((objData) => {
-      const { x = 0, y = 0, name } = objData;
+      const { x = 0, y = 0, name, width = 0, height = 0 } = objData;
       switch (name) {
         case "char_spawn": {
-          console.log("Character spawned");
           this.character = this.matter.add
             .sprite(x + 30, y - 30, "character")
             .setScale(2)
             .setOrigin(0.5, 0.4)
             .setFixedRotation();
           this.playerController = new PlayerController(
+            this,
             this.character,
-            this.cursors
+            this.cursors,
+            this.hazards
           );
-          this.matter.add
-            .sprite(x - 100, y - 100, "coffee")
+          this.cameras.main.startFollow(this.character);
+          break;
+        }
+        case "coffee": {
+          const coffee = this.matter.add
+            .sprite(x + 25, y + 25, "coffee", undefined, {
+              isStatic: true,
+              isSensor: true,
+            })
             .setScale(0.01)
             .setFixedRotation();
-          this.cameras.main.startFollow(this.character);
+          coffee.setData("type", "coffee");
+          break;
+        }
+        case "report": {
+          const report = this.matter.add
+            .sprite(x, y, "report", undefined, {
+              isStatic: true,
+              isSensor: true,
+            })
+            .setScale(0.1)
+            .setFixedRotation();
+          report.setData("type", "report");
+          break;
+        }
+        case "spikes": {
+          const spike = this.matter.add.rectangle(
+            x + width / 2,
+            y + height / 2,
+            width,
+            height,
+            {
+              isStatic: true,
+            }
+          );
+          this.hazards.add("spikes", spike);
           break;
         }
       }
@@ -70,9 +109,6 @@ export default class Game extends Phaser.Scene {
   }
 
   update(_t: number, dt: number) {
-    if (!this.playerController) {
-      return;
-    }
-    this.playerController.update(dt);
+    this.playerController?.update(dt);
   }
 }
