@@ -35,6 +35,8 @@ export default class Game extends Phaser.Scene {
     this.load.tilemapTiledJSON("tilemap", "assets/game.json");
     this.load.image("coffee", "assets/coffee.png");
     this.load.image("report", "assets/report.png");
+    this.load.image("health", "assets/health.png");
+    this.load.image("above-and-beyond", "assets/above-and-beyond.png");
   }
 
   create() {
@@ -78,6 +80,19 @@ export default class Game extends Phaser.Scene {
             .setScale(0.01)
             .setFixedRotation();
           coffee.setData("type", "coffee");
+          coffee.setData("staminaPoints", 10);
+          break;
+        }
+        case "health": {
+          const health = this.matter.add
+            .sprite(x, y, "health", undefined, {
+              isStatic: true,
+              isSensor: true,
+            })
+            .setScale(0.05)
+            .setFixedRotation();
+          health.setData("type", "health");
+          health.setData("healthPoints", 10);
           break;
         }
         case "report": {
@@ -88,6 +103,19 @@ export default class Game extends Phaser.Scene {
             })
             .setFixedRotation();
           report.setData("type", "report");
+          report.setData("staminaPoints", 10);
+          break;
+        }
+        case "above-and-beyond": {
+          const report = this.matter.add
+            .sprite(x, y, "above-and-beyond", undefined, {
+              isStatic: true,
+              isSensor: true,
+            })
+            .setScale(0.5)
+            .setFixedRotation();
+          report.setData("type", "above-and-beyond");
+          report.setData("staminaPoints", 20);
           break;
         }
         case "spikes": {
@@ -127,6 +155,18 @@ export default class Game extends Phaser.Scene {
 
   private handleHadTooMuch(numberOfCoffees: number) {
     const overdoseSeverity = numberOfCoffees - 10;
-    this.cameras.main.shake(15000 * overdoseSeverity, 0.01 * overdoseSeverity);
+    if (overdoseSeverity < 5) {
+      this.cameras.main.shake(1000 * overdoseSeverity, 0.01 * overdoseSeverity);
+    } else if (overdoseSeverity < 10) {
+      this.cameras.main.fade(1000 * (overdoseSeverity - 5), 103, 71, 54);
+      this.cameras.main.fadeFrom(
+        (1000 * (overdoseSeverity - 5)) / 2,
+        103,
+        71,
+        54
+      );
+    } else if (overdoseSeverity < 15) {
+      this.cameras.main.flash(1000 * (overdoseSeverity - 10));
+    }
   }
 }
