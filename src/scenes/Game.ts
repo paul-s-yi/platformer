@@ -31,6 +31,7 @@ export default class Game extends Phaser.Scene {
       "assets/character.png",
       "assets/character.json"
     );
+    this.load.atlas("boss", "assets/boss.png", "assets/boss.json");
     this.load.image("tiles", "assets/tilesheet.png");
     this.load.tilemapTiledJSON("tilemap", "assets/game.json");
     this.load.image("coffee", "assets/coffee.png");
