@@ -8,7 +8,6 @@ export default class PlayerController {
   private cursors: CursorKeys;
   private hazards: HazardController;
   private stateMachine: StateMachine;
-
   private speed = 5;
   constructor(
     scene: Scene,
@@ -44,6 +43,9 @@ export default class PlayerController {
       .addState("spike-hit", {
         onEnter: this.spikeOnEnter,
       })
+      .addState("spike-ceil-hit", {
+        onEnter: this.spikeCeilOnEnter,
+      })
       .setState("idle");
 
     this.sprite.setOnCollide((data: CollisionData) => {
@@ -51,6 +53,10 @@ export default class PlayerController {
 
       if (this.hazards.is("spikes", extBody)) {
         this.stateMachine.setState("spike-hit");
+        return;
+      }
+      if (this.hazards.is("spikes-ceil", extBody)) {
+        this.stateMachine.setState("spike-ceil-hit");
         return;
       }
       const gameObj = extBody.gameObject;
@@ -71,6 +77,17 @@ export default class PlayerController {
         case "coffee": {
           events.emit("coffee-consumed");
           sprite.destroy();
+          this.sprite.setVelocityX(0);
+          this.sprite.setVelocityY(0);
+          this.sprite.play("drink");
+          this.sprite.once("animationcomplete", () => {
+            this.stateMachine.setState("idle");
+          });
+          break;
+        }
+        case "report": {
+          events.emit("report-written");
+          sprite.destroy();
           break;
         }
       }
@@ -83,6 +100,7 @@ export default class PlayerController {
     this.sprite.play("idle", true);
   }
   private idleOnUpdate() {
+    this.sprite.setVelocityX(0);
     if (this.cursors.left.isDown || this.cursors.right.isDown) {
       this.stateMachine.setState("run");
     }
@@ -102,8 +120,10 @@ export default class PlayerController {
       this.sprite.flipX = false;
       this.sprite.setVelocityX(this.speed);
     } else {
-      this.sprite.setVelocityX(0);
-      this.stateMachine.setState("idle");
+      this.sprite.play("run-reverse");
+      this.sprite.once("animationcomplete", () => {
+        this.stateMachine.setState("idle");
+      });
     }
     const spacePressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
     if (spacePressed) {
@@ -183,26 +203,50 @@ export default class PlayerController {
     this.sprite.clearTint();
     this.stateMachine.setState("idle");
   }
+  private spikeCeilOnEnter() {
+    this.sprite.setVelocityY(this.speed);
+
+    const startColor = Phaser.Display.Color.ValueToColor(0xffffff);
+    const endColor = Phaser.Display.Color.ValueToColor(0xff0000);
+
+    this.scene.tweens.addCounter({
+      from: 0,
+      to: 100,
+      duration: 100,
+      repeat: 1,
+      yoyo: true,
+      ease: Phaser.Math.Easing.Sine.InOut,
+      onUpdate: (tween) => {
+        const val = tween.getValue();
+        const colorObj = Phaser.Display.Color.Interpolate.ColorWithColor(
+          startColor,
+          endColor,
+          100,
+          val
+        );
+        const color = Phaser.Display.Color.GetColor(
+          colorObj.r,
+          colorObj.g,
+          colorObj.b
+        );
+
+        this.sprite.setTintFill(color);
+      },
+      onComplete: () => {
+        this.sprite.clearTint();
+      },
+    });
+    this.sprite.clearTint();
+    this.stateMachine.setState("idle");
+  }
 
   private createAnimations() {
     this.sprite.anims.create({
       key: "idle",
       frames: this.sprite.anims.generateFrameNames("character", {
         start: 1,
-        end: 6,
+        end: 9,
         prefix: "idle_",
-        suffix: ".png",
-      }),
-      frameRate: 6,
-      repeat: -1,
-    });
-
-    this.sprite.anims.create({
-      key: "run",
-      frames: this.sprite.anims.generateFrameNames("character", {
-        start: 1,
-        end: 8,
-        prefix: "run_",
         suffix: ".png",
       }),
       frameRate: 8,
@@ -210,26 +254,59 @@ export default class PlayerController {
     });
 
     this.sprite.anims.create({
+      key: "run",
+      frames: this.sprite.anims.generateFrameNames("character", {
+        start: 1,
+        end: 4,
+        prefix: "run_",
+        suffix: ".png",
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
+    this.sprite.anims.create({
+      key: "run-reverse",
+      frames: this.sprite.anims.generateFrameNames("character", {
+        start: 4,
+        end: 1,
+        prefix: "run_",
+        suffix: ".png",
+      }),
+      frameRate: 8,
+      repeat: 0,
+    });
+    this.sprite.anims.create({
       key: "jump",
       frames: this.sprite.anims.generateFrameNames("character", {
         start: 1,
-        end: 3,
-        prefix: "jump_",
+        end: 1,
+        prefix: "air_",
         suffix: ".png",
       }),
-      frameRate: 6,
+      frameRate: 8,
       repeat: -1,
     });
     this.sprite.anims.create({
       key: "fall",
       frames: this.sprite.anims.generateFrameNames("character", {
         start: 1,
-        end: 3,
-        prefix: "fall_",
+        end: 1,
+        prefix: "air_",
         suffix: ".png",
       }),
-      frameRate: 3,
+      frameRate: 8,
       repeat: -1,
+    });
+    this.sprite.anims.create({
+      key: "drink",
+      frames: this.sprite.anims.generateFrameNames("character", {
+        start: 1,
+        end: 11,
+        prefix: "drink_",
+        suffix: ".png",
+      }),
+      frameRate: 8,
+      repeat: 1,
     });
   }
 }

@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import PlayerController from "./PlayerController";
+import { sharedInstance as events } from "./EventCenter";
 import { CursorKeys, Sprite } from "./types";
 import HazardController from "./HazardController";
 export default class Game extends Phaser.Scene {
@@ -47,7 +48,7 @@ export default class Game extends Phaser.Scene {
       throw new Error("Unable to generate ground layer");
     }
     ground.setCollisionByProperty({ collides: true });
-
+    events.on("had-too-much", this.handleHadTooMuch, this);
     map.createLayer("hazards", tileset);
     const objectsLayer = map.getObjectLayer("objects");
     objectsLayer?.objects.forEach((objData) => {
@@ -55,9 +56,9 @@ export default class Game extends Phaser.Scene {
       switch (name) {
         case "char_spawn": {
           this.character = this.matter.add
-            .sprite(x + 30, y - 30, "character")
+            .sprite(x + 15, y - 20, "character")
             .setScale(2)
-            .setOrigin(0.5, 0.4)
+            .setOrigin()
             .setFixedRotation();
           this.playerController = new PlayerController(
             this,
@@ -85,7 +86,6 @@ export default class Game extends Phaser.Scene {
               isStatic: true,
               isSensor: true,
             })
-            .setScale(0.1)
             .setFixedRotation();
           report.setData("type", "report");
           break;
@@ -103,6 +103,19 @@ export default class Game extends Phaser.Scene {
           this.hazards.add("spikes", spike);
           break;
         }
+        case "spikes-ceil": {
+          const spikeCeil = this.matter.add.rectangle(
+            x + width / 2,
+            y + height / 2,
+            width,
+            height,
+            {
+              isStatic: true,
+            }
+          );
+          this.hazards.add("spikes-ceil", spikeCeil);
+          break;
+        }
       }
     });
     this.matter.world.convertTilemapLayer(ground);
@@ -110,5 +123,10 @@ export default class Game extends Phaser.Scene {
 
   update(_t: number, dt: number) {
     this.playerController?.update(dt);
+  }
+
+  private handleHadTooMuch(numberOfCoffees: number) {
+    const overdoseSeverity = numberOfCoffees - 10;
+    this.cameras.main.shake(15000 * overdoseSeverity, 0.01 * overdoseSeverity);
   }
 }
