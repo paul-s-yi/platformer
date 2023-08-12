@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="112" height="42" tilewidth="70" tileheight="70" infinite="1" nextlayerid="6" nextobjectid="91">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="112" height="42" tilewidth="70" tileheight="70" infinite="1" nextlayerid="6" nextobjectid="100">
  <editorsettings>
   <export target="game.json" format="json"/>
  </editorsettings>
@@ -864,10 +864,10 @@
   </data>
  </layer>
  <objectgroup id="2" name="objects">
-  <object id="4" name="char_spawn" x="2521" y="1240.67" width="70" height="70"/>
-  <object id="7" name="coffee" x="4315" y="1118.75" width="50" height="50"/>
-  <object id="9" name="coffee" x="6797.58" y="2657.58" width="50" height="50"/>
-  <object id="10" name="coffee" x="5401.8" y="1610.64" width="50" height="50"/>
+  <object id="4" name="char_spawn" x="2518.92" y="1189.82" width="70" height="70"/>
+  <object id="7" name="coffee" x="4315.88" y="1134.66" width="50" height="50"/>
+  <object id="9" name="coffee" x="6798.86" y="2676.72" width="50" height="50"/>
+  <object id="10" name="coffee" x="5401.8" y="1622.79" width="50" height="50"/>
   <object id="39" name="spikes" x="3850" y="1368.75" width="980" height="30"/>
   <object id="52" name="sawblade" x="4340" y="175" width="700" height="35"/>
   <object id="54" name="spikes" x="5670" y="1648.5" width="70" height="30"/>
@@ -876,7 +876,7 @@
   <object id="57" name="spikes" x="-770" y="1300" width="420" height="30"/>
   <object id="58" name="spikes" x="7280" y="3050" width="420" height="30"/>
   <object id="59" name="spikes" x="7350" y="2700" width="280" height="30"/>
-  <object id="60" name="coffee" x="7565.91" y="1686.5" width="50" height="50"/>
+  <object id="60" name="coffee" x="7567.89" y="1697.41" width="50" height="50"/>
   <object id="61" name="report" x="5117.94" y="1208.96" width="50" height="50"/>
   <object id="62" name="report" x="6241.04" y="1559.01" width="50" height="50"/>
   <object id="63" name="report" x="3091.77" y="1205.3" width="50" height="50"/>
@@ -889,31 +889,16 @@
   <object id="70" name="report" x="4243.99" y="116.945" width="50" height="50"/>
   <object id="71" name="spikes" x="8260" y="3400" width="350" height="30"/>
   <object id="72" name="spikes" x="8680" y="3400" width="350" height="30"/>
-  <object id="74" name="report" x="4140" y="1280" width="50" height="50">
-   <properties>
-    <property name="aboveAndBeyond" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="75" name="report" x="4490" y="1280" width="50" height="50">
-   <properties>
-    <property name="aboveAndBeyond" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="76" name="report" x="4551.21" y="77.1627" width="50" height="50">
-   <properties>
-    <property name="aboveAndBeyond" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="77" name="report" x="8620" y="3380" width="50" height="50">
-   <properties>
-    <property name="aboveAndBeyond" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="90" name="report" x="8338.09" y="1680.7" width="50" height="50">
-   <properties>
-    <property name="aboveAndBeyond" type="bool" value="true"/>
-   </properties>
-  </object>
+  <object id="76" name="above-and-beyond" x="4551.21" y="77.1627" width="50" height="50"/>
+  <object id="91" name="health" x="5261.36" y="1267.37" width="50" height="50"/>
+  <object id="92" name="health" x="7920" y="1758.8" width="50" height="50"/>
+  <object id="93" name="health" x="9179.45" y="3368.93" width="50" height="50"/>
+  <object id="94" name="above-and-beyond" x="4146.77" y="1279.42" width="50" height="50"/>
+  <object id="95" name="above-and-beyond" x="4483.5" y="1277.72" width="50" height="50"/>
+  <object id="96" name="above-and-beyond" x="8340.01" y="1690.22" width="50" height="50"/>
+  <object id="97" name="above-and-beyond" x="8619.88" y="3378.95" width="50" height="50"/>
+  <object id="98" name="health" x="8481.15" y="3161.26" width="50" height="50"/>
+  <object id="99" name="health" x="10438.3" y="3366.11" width="50" height="50"/>
  </objectgroup>
  <layer id="5" name="hazards" width="112" height="42">
   <data encoding="csv">
