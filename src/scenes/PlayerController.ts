@@ -8,6 +8,8 @@ export default class PlayerController {
   private cursors: CursorKeys;
   private hazards: HazardController;
   private stateMachine: StateMachine;
+  private health = 100;
+  private stamina = 100;
   private speed = 5;
   constructor(
     scene: Scene,
@@ -74,19 +76,40 @@ export default class PlayerController {
       const sprite = gameObj as Sprite;
       const type = sprite.getData("type");
       switch (type) {
+        case "health": {
+          const value = sprite.getData("healthPoints") ?? 10;
+          this.health = Phaser.Math.Clamp(this.health + value, 0, 100);
+          events.emit("health-changed", this.health);
+          sprite.destroy();
+          break;
+        }
         case "coffee": {
-          events.emit("coffee-consumed");
+          const value = sprite.getData("staminaPoints") ?? 10;
+          this.stamina = Phaser.Math.Clamp(this.stamina + value, 0, 100);
+          events.emit("stamina-changed", this.stamina);
           sprite.destroy();
           this.sprite.setVelocityX(0);
           this.sprite.setVelocityY(0);
           this.sprite.play("drink");
+          this.speed += 0.5;
           this.sprite.once("animationcomplete", () => {
             this.stateMachine.setState("idle");
           });
           break;
         }
         case "report": {
+          const value = sprite.getData("staminaPoints") ?? 10;
+          this.stamina = Phaser.Math.Clamp(this.stamina - value, 0, 100);
+          events.emit("stamina-changed", this.stamina);
           events.emit("report-written");
+          sprite.destroy();
+          break;
+        }
+        case "above-and-beyond": {
+          const value = sprite.getData("staminaPoints") ?? 40;
+          this.stamina = Phaser.Math.Clamp(this.stamina - value, 0, 100);
+          events.emit("stamina-changed", this.stamina);
+          events.emit("went-above-and-beyond");
           sprite.destroy();
           break;
         }
@@ -169,7 +192,8 @@ export default class PlayerController {
 
   private spikeOnEnter() {
     this.sprite.setVelocityY(-this.speed * 2);
-
+    this.health = Phaser.Math.Clamp(this.health - 10, 0, 100);
+    events.emit("health-changed", this.health);
     const startColor = Phaser.Display.Color.ValueToColor(0xffffff);
     const endColor = Phaser.Display.Color.ValueToColor(0xff0000);
 
