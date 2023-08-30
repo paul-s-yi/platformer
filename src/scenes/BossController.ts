@@ -1,16 +1,14 @@
 import StateMachine from "../statemachine/StateMachine";
-import { Scene, Sprite } from "./types";
+import { Sprite } from "./types";
 
 export default class BossController {
-  private scene: Scene;
   private sprite: Sprite;
   private stateMachine: StateMachine;
 
   private speed = 1.5;
   private timeSinceMove = 0;
 
-  constructor(scene: Scene, sprite: Sprite) {
-    this.scene = scene;
+  constructor(sprite: Sprite) {
     this.sprite = sprite;
     this.createAnimations();
     this.stateMachine = new StateMachine(this, "boss");
