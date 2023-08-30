@@ -118,4 +118,4 @@ Took a little break to focus on work, but I'm back!
 - Character spritesheet provided by [Kalann](https://kalann.itch.io/a-normal-guy-that-gets-super-strong-normal-guy)
 - Enemy spritesheet provided by [Kronovi-](https://darkpixel-kronovi.itch.io/undead-executioner)
 - [Coffee](https://pngimg.com/image/16848) and [health](https://pngimg.com/image/68059) graphics provided by [PNGimg](https://pngimg.com)
-- Thank you to
+- A warm thank you to Tommy Leung from Ourcade for his excellent resources on [implementing state machines](https://blog.ourcade.co/posts/2021/character-logic-state-machine-typescript/) and working out other kinks in Phaser.js.
