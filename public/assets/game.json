@@ -980,6 +980,28 @@
                  "width":50,
                  "x":10438.283958399,
                  "y":3366.11251181847
+                }, 
+                {
+                 "height":100,
+                 "id":100,
+                 "name":"boss",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":100,
+                 "x":10176.0242580178,
+                 "y":3322.00523730103
+                }, 
+                {
+                 "height":100,
+                 "id":102,
+                 "name":"boss",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":100,
+                 "x":3393.42176502436,
+                 "y":1213.30987186428
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1244,7 +1266,7 @@
          "y":0
         }],
  "nextlayerid":6,
- "nextobjectid":100,
+ "nextobjectid":103,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.1",

@@ -3,11 +3,13 @@ import PlayerController from "./PlayerController";
 import { sharedInstance as events } from "./EventCenter";
 import { CursorKeys, Sprite } from "./types";
 import HazardController from "./HazardController";
+import BossController from "./BossController";
 export default class Game extends Phaser.Scene {
   private cursors!: CursorKeys;
-
   private character!: Sprite;
+  private boss!: Sprite;
   private playerController?: PlayerController;
+  private bosses: BossController[] = [];
   private hazards!: HazardController;
   constructor() {
     super("game");
@@ -21,7 +23,7 @@ export default class Game extends Phaser.Scene {
       throw new Error("Unable to create cursor keys");
     }
     this.hazards = new HazardController();
-
+    this.bosses = [];
     this.scene.launch("ui");
   }
 
@@ -70,6 +72,14 @@ export default class Game extends Phaser.Scene {
             this.hazards
           );
           this.cameras.main.startFollow(this.character);
+          break;
+        }
+        case "boss": {
+          const boss = this.matter.add
+            .sprite(x + 50, y - 50, "boss")
+            .setOrigin()
+            .setFixedRotation();
+          this.bosses.push(new BossController(this, boss));
           break;
         }
         case "coffee": {
@@ -152,6 +162,7 @@ export default class Game extends Phaser.Scene {
 
   update(_t: number, dt: number) {
     this.playerController?.update(dt);
+    this.bosses.forEach((boss) => boss.update(dt));
   }
 
   private handleHadTooMuch(numberOfCoffees: number) {
