@@ -75,11 +75,11 @@ export default class Game extends Phaser.Scene {
           break;
         }
         case "boss": {
-          const boss = this.matter.add
+          this.boss = this.matter.add
             .sprite(x + 50, y - 50, "boss")
             .setOrigin()
             .setFixedRotation();
-          this.bosses.push(new BossController(this, boss));
+          this.bosses.push(new BossController(this.boss));
           break;
         }
         case "coffee": {
