@@ -26,7 +26,7 @@
 
 ### A 2-D platformer built with TypeScript!
 
-This fully free-to-play game (WIP) was built with TypeScript, using Phaser.js and Matter.js as the physics engine. It's available to play right in your browser of choice at [https://psycodes.com](https://psycodes.com).
+This fully free-to-play game (WIP) was built with TypeScript, using Phaser.js and Matter.js as the physics engine. It's available to play right in your browser of choice at [https://platformer-tau.vercel.app](https://platformer-tau.vercel.app).
 
 Special thanks to my wife and my friends for being supportive as I work on this fun little project!
 
@@ -38,7 +38,7 @@ You're an office worker entering the rat race, and you've got some obstacles to 
 
 ### Play in Browser
 
-If you're just looking to try out the game, you can head over to [this site](https://psycodes.com) and start playing right away!
+If you're just looking to try out the game, you can head over to [this site](https://platformer-tau.vercel.app) and start playing right away!
 
 ### Developers
 
