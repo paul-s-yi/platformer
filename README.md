@@ -17,6 +17,7 @@
   - [Story](#story)
   - [Multiplayer](#multiplayer)
 - [Changelog](#changelog)
+- [License](#license)
 - [Credits](#credits)
   - [Tools and Technologies](#tools-and-technologies)
   - [Resources and Assets](#resources-and-assets)
@@ -103,6 +104,10 @@ Took a little break to focus on work, but I'm back!
 - Added tilemap, powerup graphics
 
 </details>
+
+## License
+
+This game is licensed under the terms of the GPL Open Source license and is available for free.
 
 ## Credits
 
